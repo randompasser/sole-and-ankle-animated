@@ -8,6 +8,7 @@ import UnstyledButton from '../UnstyledButton';
 import SuperHeader from '../SuperHeader';
 import MobileMenu from '../MobileMenu';
 import VisuallyHidden from '../VisuallyHidden';
+import NavLinkWrapper from './NavLinkWrapper';
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -114,7 +115,7 @@ const Filler = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+const NavLink = styled(NavLinkWrapper)`
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
