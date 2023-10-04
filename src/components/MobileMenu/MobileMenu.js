@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components/macro';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
 import { QUERIES, WEIGHTS } from '../../constants';
@@ -11,7 +11,10 @@ import VisuallyHidden from '../VisuallyHidden';
 
 const MobileMenu = ({ isOpen, onDismiss }) => {
   return (
-    <Overlay isOpen={isOpen} onDismiss={onDismiss}>
+    <Overlay 
+      isOpen={isOpen} 
+      onDismiss={onDismiss}
+      style={{'--enter-animation-duration': '300ms'}}>
       <Content aria-label="Menu">
         <CloseButton onClick={onDismiss}>
           <Icon id="close" />
@@ -19,22 +22,53 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
         </CloseButton>
         <Filler />
         <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLink href="/sale" style={{'--animation-delay': '0ms'}}>Sale</NavLink>
+          <NavLink href="/new" style={{'--animation-delay': '50ms'}}>New&nbsp;Releases</NavLink>
+          <NavLink href="/men" style={{'--animation-delay': '100ms'}}>Men</NavLink>
+          <NavLink href="/women" style={{'--animation-delay': '150ms'}}>Women</NavLink>
+          <NavLink href="/kids" style={{'--animation-delay': '200ms'}}>Kids</NavLink>
+          <NavLink href="/collections" style={{'--animation-delay': '250ms'}}>Collections</NavLink>
         </Nav>
         <Footer>
-          <SubLink href="/terms">Terms and Conditions</SubLink>
-          <SubLink href="/privacy">Privacy Policy</SubLink>
-          <SubLink href="/contact">Contact Us</SubLink>
+          <SubLink href="/terms" style={{'--animation-delay': '300ms'}}>Terms and Conditions</SubLink>
+          <SubLink href="/privacy" style={{'--animation-delay': '350ms'}}>Privacy Policy</SubLink>
+          <SubLink href="/contact" style={{'--animation-delay': '400ms'}}>Contact Us</SubLink>
         </Footer>
       </Content>
     </Overlay>
   );
 };
+
+const OverlayFadeIn = keyframes`
+  from {
+    background: none;
+  }
+
+  to {
+    background: var(--color-backdrop);
+  }
+`;
+
+const ContentSlideIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const NavLinkSlideIn = keyframes`
+  from {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 const Overlay = styled(DialogOverlay)`
   position: fixed;
@@ -45,6 +79,10 @@ const Overlay = styled(DialogOverlay)`
   background: var(--color-backdrop);
   display: flex;
   justify-content: flex-end;
+
+  @media ${QUERIES.prefersReducedMotionNoPref} {
+    animation: ${OverlayFadeIn} var(--enter-animation-duration) both ease-out;
+  }
 `;
 
 const Content = styled(DialogContent)`
@@ -54,6 +92,10 @@ const Content = styled(DialogContent)`
   padding: 24px 32px;
   display: flex;
   flex-direction: column;
+
+  @media ${QUERIES.prefersReducedMotionNoPref} {
+    animation: ${ContentSlideIn} var(--enter-animation-duration) both ease-out;
+  }
 `;
 
 const CloseButton = styled(UnstyledButton)`
@@ -69,7 +111,14 @@ const Nav = styled.nav`
   gap: 16px;
 `;
 
-const NavLink = styled.a`
+const Link = styled.a`
+  @media ${QUERIES.prefersReducedMotionNoPref} {
+    animation: ${NavLinkSlideIn} var(--enter-animation-duration) both ease-out;
+    animation-delay: calc(200ms + var(--animation-delay));
+  }
+`;
+
+const NavLink = styled(Link)`
   color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
   text-decoration: none;
@@ -92,7 +141,7 @@ const Footer = styled.footer`
   justify-content: flex-end;
 `;
 
-const SubLink = styled.a`
+const SubLink = styled(Link)`
   color: var(--color-gray-700);
   font-size: 0.875rem;
   text-decoration: none;
