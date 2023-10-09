@@ -137,6 +137,30 @@ const Flag = styled.div`
   font-weight: ${WEIGHTS.bold};
   color: var(--color-white);
   border-radius: 2px;
+
+  /* Shiny gradient effect on hover */
+  overflow: hidden;
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.8) 50%, rgba(0,0,0,0) 100%);
+    opacity: 0.5;
+    content: '';
+    transform: translateX(-100%);
+  }
+
+  ${Link}:hover &::before {
+    transform: translateX(100%);
+    transition: transform linear 500ms;
+
+    /* Start effect sooner if reduce motion is enabled */
+    @media ${QUERIES.prefersReducedMotionNoPref} {
+      transition-delay: 300ms;
+    }
+  }
 `;
 
 const SaleFlag = styled(Flag)`
