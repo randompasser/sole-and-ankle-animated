@@ -5,36 +5,44 @@ import { QUERIES, WEIGHTS } from '../../constants';
 function NavLinkWrapper({ children, ...props }) {
   return (
     <Link { ...props }>
-      <ChildrenWrapper>
+        <HoverBorder />
         <Text>{ children }</Text>
-        <HoverText aria-hidden={true}>{ children }</HoverText>
-      </ChildrenWrapper>
     </Link>
   );
 }
 
 const Link = styled.a`
-  --hover-duration: 200ms;
+  position: relative;
   overflow: hidden;
 `;
 
-const ChildrenWrapper = styled.span`
-  position: relative;
-`
-
 const Text = styled.p`
+  padding: 8px;
+`;
+
+const HoverBorder = styled.span`
+  --border-width: 2px;
+  
+  position: absolute;
+  left: 0;
+  top: var(--border-width);
+  width: 100%;
+  height: 100%;
+  border: var(--border-width) var(--color-gray-900) solid;
+  border-top: 0;
+  border-right: 0;
+
+  transform: translateY(-100%);
   @media ${QUERIES.prefersReducedMotionNoPref} {
-    transition: transform var(--hover-duration);
+    transition: transform 300ms ease-in;
   }
 
   ${Link}:hover & {
-    transform: translateY(-100%);
+    transform: translateY(calc(0px - var(--border-width)));
+    @media ${QUERIES.prefersReducedMotionNoPref} {
+      transition: 200ms ease-out;
+    }
   }
-`;
-
-const HoverText = styled(Text)`
-  position: absolute;
-  font-weight: ${WEIGHTS.bold};
 `;
 
 export default NavLinkWrapper;
